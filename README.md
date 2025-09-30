@@ -1,4 +1,4 @@
-# SR Linux Fan Tray SNMP Trap
+# SR Linux SNMP Framework - Fan Tray SNMP Trap
 
 This project provides a **custom SNMP trap implementation for Nokia SR Linux**.  
 It monitors the YANG state path:
