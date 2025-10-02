@@ -1,18 +1,9 @@
-import json
+import ujson as json
 
 def _state_to_int(s):
     """
     Convert a state string to an integer for SNMP trap codes.
-
-    In this simplified mapping, any value equal to "up" (case‑insensitive)
-    returns 1. All other values return 2. This matches the user's request to
-    map only the "up" state to 1 and everything else to 2.
-
-    Args:
-        s: The state value to convert (string or any type convertible to string).
-
-    Returns:
-        1 if the state is "up" (case‑insensitive), otherwise 2.
+    "up" => 1, everything else => 2
     """
     sl = str(s).lower()
     if sl in ("up",):
@@ -22,13 +13,7 @@ def _state_to_int(s):
 
 def snmp_main(in_json_str: str) -> str:
     """
-    SNMP trap generation entry point.
-
-    Args:
-        in_json_str: JSON string containing '_trap_info_' and 'context' data.
-
-    Returns:
-        A JSON string describing one or more traps to be sent.
+    SNMP trap generation entry point for fan-tray oper-state.
     """
     d = json.loads(in_json_str)
     traps_out = []
@@ -39,7 +24,6 @@ def snmp_main(in_json_str: str) -> str:
         # Only handle fan-tray oper-state triggers
         if trig.startswith("/platform/fan-tray") and trig.endswith("/oper-state"):
             trays = d.get("platform", {}).get("fan-tray", [])
-            # Ensure trays is a list
             if isinstance(trays, dict):
                 trays = [trays]
             for tray in trays or []:
@@ -47,15 +31,20 @@ def snmp_main(in_json_str: str) -> str:
                 if tray_id is None:
                     continue
 
-                # Build varbind data
+                # Ensure tray_id is integer
+                try:
+                    tray_id_int = int(tray_id)
+                except ValueError:
+                    # fallback if tray_id is not numeric
+                    tray_id_int = 0
+
                 obj = {
-                    "fanTrayID": str(tray_id),
+                    "fanTrayID": tray_id_int,
                     "fanTrayOperState": _state_to_int(newv),
                 }
                 traps_out.append({
-                    # Use state value to determine trap name
                     "trap": "FanTrayDown" if _state_to_int(newv) == 2 else "FanTrayUp",
-                    "indexes": {"fanTrayID": str(tray_id)},
+                    "indexes": {"fanTrayID": tray_id_int},
                     "objects": obj
                 })
 
