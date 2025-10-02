@@ -36,18 +36,18 @@ Nokia SR Linux includes a flexible **SNMP framework** that allows operators to:
     - `up` → 1, `down` → 2
   - **PowerSupplyOperState trap** (OID: `.1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7`)  
     - `up` → 1, `down` → 2
-- Lightweight MicroPython handlers (`fan_trap.py`, `power_supply.py`).
-- YAML trap definitions separated for clarity (`fan_trap.yaml`, `power_supply.yaml`).
+- Lightweight MicroPython handlers (`fan-trap.py`, `power-supply.py`).
+- YAML trap definitions separated for clarity (`fan-trap.yaml`, `power-supply.yaml`).
 
 ---
 
 ## 📂 Repository Contents
 
 ```
-fan_trap.py          # MicroPython script for fan-tray oper-state
-fan_trap.yaml        # Trap definition YAML for fan-tray
-power_supply.py      # MicroPython script for power-supply oper-state
-power_supply.yaml    # Trap definition YAML for power-supply
+fan-trap.py          # MicroPython script for fan-tray oper-state
+fan-trap.yaml        # Trap definition YAML for fan-tray
+power-supply.py      # MicroPython script for power-supply oper-state
+power-supply.yaml    # Trap definition YAML for power-supply
 README.md            # This documentation
 LICENSE              # MIT License (default, feel free to change)
 ```
@@ -59,10 +59,10 @@ LICENSE              # MIT License (default, feel free to change)
 ### 1. Copy the files to your SR Linux node
 
 ```bash
-scp fan_trap.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp fan_trap.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp power_supply.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp power_supply.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp fan-trap.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp fan-trap.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp power-supply.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp power-supply.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
 ```
 
 ### 2. Register the trap definitions
@@ -71,8 +71,8 @@ Edit `/etc/opt/srlinux/snmp/snmp_files_config.yaml` and add:
 
 ```yaml
 trap-definitions:
-  - scripts/fan_trap.yaml
-  - scripts/power_supply.yaml
+  - scripts/fan-trap.yaml
+  - scripts/power-supply.yaml
 ```
 
 ### 3. Restart the SNMP server
@@ -96,11 +96,11 @@ commit now
 
 ---
 
-## 📑 fan_trap.yaml (Example)
+## 📑 fan-trap.yaml (Example)
 
 ```yaml
-# /etc/opt/srlinux/snmp/scripts/fan_trap.yaml
-python-script: fan_trap.py
+# /etc/opt/srlinux/snmp/scripts/fan-trap.yaml
+python-script: fan-trap.py
 enabled: true
 debug: true
 
@@ -127,11 +127,11 @@ traps:
 
 ---
 
-## 📑 power_supply.yaml (Example)
+## 📑 power-supply.yaml (Example)
 
 ```yaml
-# /etc/opt/srlinux/snmp/scripts/power_supply.yaml
-python-script: power_supply.py
+# /etc/opt/srlinux/snmp/scripts/power-supply.yaml
+python-script: power-supply.py
 enabled: true
 debug: true
 
