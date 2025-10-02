@@ -1,5 +1,5 @@
 # /etc/opt/srlinux/snmp/scripts/fan_trap.yaml
-python-script: fan_trap.py
+python-script: fan-trap.py
 enabled: true
 debug: true
 
