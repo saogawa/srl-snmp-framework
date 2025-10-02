@@ -2,7 +2,7 @@ import ujson as json
 
 def _state_to_int(s: str) -> int:
     """
-    Convert fan oper-state string to integer.
+    Convert fan-tray oper-state string to integer.
     up   -> 1
     down -> 2
     all others -> 2 (treated as down)
