@@ -1,19 +1,21 @@
 import ujson as json
 
-def _state_to_int(s):
+def _state_to_int(s: str) -> int:
     """
-    Convert a state string to an integer for SNMP trap codes.
-    "up" => 1, everything else => 2
+    Convert fan oper-state string to integer.
+    up   -> 1
+    down -> 2
+    all others -> 2 (treated as down)
     """
     sl = str(s).lower()
-    if sl in ("up",):
+    if sl == "up":
         return 1
     else:
         return 2
 
 def snmp_main(in_json_str: str) -> str:
     """
-    SNMP trap generation entry point for fan-tray oper-state.
+    SNMP trap generation entry point for Fan Tray oper-state.
     """
     d = json.loads(in_json_str)
     traps_out = []
@@ -21,7 +23,7 @@ def snmp_main(in_json_str: str) -> str:
     for t in d.get("_trap_info_", []):
         trig = t.get("trigger")
         newv = t.get("new-value")
-        # Only handle fan-tray oper-state triggers
+
         if trig.startswith("/platform/fan-tray") and trig.endswith("/oper-state"):
             trays = d.get("platform", {}).get("fan-tray", [])
             if isinstance(trays, dict):
@@ -30,20 +32,16 @@ def snmp_main(in_json_str: str) -> str:
                 tray_id = tray.get("id")
                 if tray_id is None:
                     continue
-
-                # Ensure tray_id is integer
                 try:
                     tray_id_int = int(tray_id)
                 except ValueError:
-                    # fallback if tray_id is not numeric
                     tray_id_int = 0
-
                 obj = {
                     "fanTrayID": tray_id_int,
                     "fanTrayOperState": _state_to_int(newv),
                 }
                 traps_out.append({
-                    "trap": "FanTrayDown" if _state_to_int(newv) == 2 else "FanTrayUp",
+                    "trap": "tmnxPhysChassisFanOperStatus",
                     "indexes": {"fanTrayID": tray_id_int},
                     "objects": obj
                 })
