@@ -1,0 +1,24 @@
+# /etc/opt/srlinux/snmp/scripts/power_supply.yaml
+python-script: fan_trap.py
+enabled: true
+debug: true
+
+traps:
+  - name: tmnxPhysChassisPowerSupplyOperStatus
+    enabled: true
+    oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7
+    triggers:
+      - /platform/power-supply[id=*]/oper-state
+    context:
+      - /platform/power-supply
+    data:
+      - indexes:
+          - name: powerSupplyID
+            syntax: integer
+        objects:
+          - name: powerSupplyID
+            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7.1
+            syntax: integer
+          - name: powerSupplyOperState
+            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7.2
+            syntax: integer
