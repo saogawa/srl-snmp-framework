@@ -1,5 +1,5 @@
-# /etc/opt/srlinux/snmp/scripts/power_supply.yaml
-python-script: fan_trap.py
+# /etc/opt/srlinux/snmp/scripts/power-supply.yaml
+python-script: power-supply.py
 enabled: true
 debug: true
 
