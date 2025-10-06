@@ -2,12 +2,12 @@ import ujson as json
 
 def _state_to_int(s: str) -> int:
     """
-    Convert power-supply oper-state string to integer based on TmnxDeviceState.
+    Convert fan-tray oper-state string to integer based on TmnxDeviceState.
     """
-    try:
-        return int(s)
-    except ValueError:
-        return 1  # Default to deviceStateUnknown if conversion fails
+    if s in ["up"]:
+        return 1
+    else:
+        return 2
 
 def snmp_main(in_json_str: str) -> str:
     """
@@ -37,7 +37,7 @@ def snmp_main(in_json_str: str) -> str:
                     "powerSupplyOperState": _state_to_int(newv),
                 }
                 traps_out.append({
-                    "trap": "tmnxPhysChassisPowerSupplyOperStatus",
+                    "trap": "tmnxPhysChassisPMInputFeedDown",
                     "indexes": {"powerSupplyID": psu_id_int},
                     "objects": obj
                 })

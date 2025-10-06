@@ -4,10 +4,10 @@ def _state_to_int(s: str) -> int:
     """
     Convert fan-tray oper-state string to integer based on TmnxDeviceState.
     """
-    try:
-        return int(s)
-    except ValueError:
-        return 1  # Default to deviceStateUnknown if conversion fails
+    if s in ["up", "starting"]:
+        return 1
+    else:
+        return 2
 
 def snmp_main(in_json_str: str) -> str:
     """

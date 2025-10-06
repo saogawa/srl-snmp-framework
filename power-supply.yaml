@@ -4,9 +4,9 @@ enabled: true
 debug: true
 
 traps:
-  - name: tmnxPhysChassisPowerSupplyOperStatus
+  - name: tmnxPhysChassisPMInputFeedDown
     enabled: true
-    oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7
+    oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.8
     triggers:
       - /platform/power-supply[id=*]/oper-state
     context:
