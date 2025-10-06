@@ -2,16 +2,12 @@ import ujson as json
 
 def _state_to_int(s: str) -> int:
     """
-    Convert fan-tray oper-state string to integer.
-    up   -> 1
-    down -> 2
-    all others -> 2 (treated as down)
+    Convert fan-tray oper-state string to integer based on TmnxDeviceState.
     """
-    sl = str(s).lower()
-    if sl == "up":
-        return 1
-    else:
-        return 2
+    try:
+        return int(s)
+    except ValueError:
+        return 1  # Default to deviceStateUnknown if conversion fails
 
 def snmp_main(in_json_str: str) -> str:
     """
