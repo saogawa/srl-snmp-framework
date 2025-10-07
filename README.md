@@ -86,7 +86,7 @@ trap-definitions:
 ```bash
 enter candidate
 set / system snmp trap-group 1 network-instance mgmt
-set / system snmp trap-group 1 destination 1 address 1.1.1.1
+set / system snmp trap-group 1 destination 1 address 192.168.1.1
 set / system snmp trap-group 1 destination 1 security-level no-auth-no-priv
 set / system snmp trap-group 1 destination 1 community-entry 1 community public
 set / system snmp network-instance mgmt admin-state enable
