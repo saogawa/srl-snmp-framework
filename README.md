@@ -44,12 +44,12 @@ Nokia SR Linux includes a flexible **SNMP framework** that allows operators to:
 ## 📂 Repository Contents
 
 ```
-fan-trap.py          # MicroPython script for fan-tray oper-state
-fan-trap.yaml        # Trap definition YAML for fan-tray
-power-supply.py      # MicroPython script for power-supply oper-state
-power-supply.yaml    # Trap definition YAML for power-supply
-README.md            # This documentation
-LICENSE              # MIT License (default, feel free to change)
+timetra-fantrap.py          # MicroPython script for fan-tray oper-state
+timetra-fantrap.yaml        # Trap definition YAML for fan-tray
+timetra-psu.py              # MicroPython script for power-supply oper-state
+timetra-psu.yaml            # Trap definition YAML for power-supply
+README.md                   # This documentation
+LICENSE                     # MIT License (default, feel free to change)
 ```
 
 ---
@@ -59,10 +59,10 @@ LICENSE              # MIT License (default, feel free to change)
 ### 1. Copy the files to your SR Linux node
 
 ```bash
-scp fan-trap.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp fan-trap.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp power-supply.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
-scp power-supply.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp timetra-fantrap.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp timetra-fantrap.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp timetra-psu.py admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
+scp timetra-psu.yaml admin@<srlinux-ip>:/etc/opt/srlinux/snmp/scripts/
 ```
 
 ### 2. Register the trap definitions
@@ -71,8 +71,8 @@ Edit `/etc/opt/srlinux/snmp/snmp_files_config.yaml` and add:
 
 ```yaml
 trap-definitions:
-  - scripts/fan-trap.yaml
-  - scripts/power-supply.yaml
+  - scripts/timetra-fantrap.yaml
+  - scripts/timetra-psu.yaml
 ```
 
 ### 3. Restart the SNMP server
@@ -92,95 +92,6 @@ configure system snmp
       community-entry ce1
         community "s3cr3t"
 commit now
-```
-
----
-
-## 📑 fan-trap.yaml (Example)
-
-```yaml
-# /etc/opt/srlinux/snmp/scripts/fan-trap.yaml
-python-script: fan-trap.py
-enabled: true
-debug: true
-
-traps:
-  - name: tmnxPhysChassisFanOperStatus
-    enabled: true
-    oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.1.1.2
-    triggers:
-      - /platform/fan-tray[id=*]/oper-state
-    context:
-      - /platform/fan-tray
-    data:
-      - indexes:
-          - name: fanTrayID
-            syntax: integer
-        objects:
-          - name: fanTrayID
-            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.1.1.2.1
-            syntax: integer
-          - name: fanTrayOperState
-            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.1.1.2.2
-            syntax: integer
-```
-
----
-
-## 📑 power-supply.yaml (Example)
-
-```yaml
-# /etc/opt/srlinux/snmp/scripts/power-supply.yaml
-python-script: power-supply.py
-enabled: true
-debug: true
-
-traps:
-  - name: tmnxPhysChassisPowerSupplyOperStatus
-    enabled: true
-    oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7
-    triggers:
-      - /platform/power-supply[id=*]/oper-state
-    context:
-      - /platform/power-supply
-    data:
-      - indexes:
-          - name: powerSupplyID
-            syntax: integer
-        objects:
-          - name: powerSupplyID
-            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7.1
-            syntax: integer
-          - name: powerSupplyOperState
-            oid: .1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7.2
-            syntax: integer
-```
-
----
-
-## ▶️ Example Trap Output
-
-```json
-{
-  "traps": [
-    {
-      "trap": "tmnxPhysChassisFanOperStatus",
-      "indexes": {"fanTrayID": 1},
-      "objects": {
-        "fanTrayID": 1,
-        "fanTrayOperState": 1
-      }
-    },
-    {
-      "trap": "tmnxPhysChassisPowerSupplyOperStatus",
-      "indexes": {"powerSupplyID": 2},
-      "objects": {
-        "powerSupplyID": 2,
-        "powerSupplyOperState": 2
-      }
-    }
-  ]
-}
 ```
 
 ---
