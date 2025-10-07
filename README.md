@@ -85,12 +85,11 @@ trap-definitions:
 
 ```bash
 enter candidate
-configure system snmp
-  trap-group tg1 admin-state enable network-instance default
-    destination d1 admin-state enable
-      address 192.0.2.10
-      community-entry ce1
-        community "s3cr3t"
+set / system snmp trap-group 1 network-instance mgmt
+set / system snmp trap-group 1 destination 1 address 1.1.1.1
+set / system snmp trap-group 1 destination 1 security-level no-auth-no-priv
+set / system snmp trap-group 1 destination 1 community-entry 1 community public
+set / system snmp network-instance mgmt admin-state enable
 commit now
 ```
 
