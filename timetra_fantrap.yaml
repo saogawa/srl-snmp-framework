@@ -1,0 +1,37 @@
+# This is the mapping for TIMETRA-CHASSIS-MIB. It defines MIB table tmnxHwTable, tmnxPhysChassisFanTable and tmnxPhysChassisPMTable.
+paths:
+  - /platform/chassis/...
+  - /platform/control/
+  - /platform/linecard/
+optional-paths: # not all hardware platforms supports these
+  - /platform/control/temperature
+  - /platform/linecard/temperature
+  - /platform/linecard/mda
+  - /platform/linecard/mda/temperature
+  - /platform/fabric/...
+  - /platform/fan-tray/...
+  - /platform/power-supply/...
+python-script: timetra_fantrap.py
+enabled: true
+debug: false
+tables:
+  - name:    tmnxPhysChassisFanTable
+    enabled: true
+    oid:     1.3.6.1.4.1.6527.3.1.2.2.1.24.1
+    indexes:
+      - name:   tmnxPhysChassisClass
+        # no oid !
+        syntax: integer
+      - name:   tmnxPhysChassisNum
+        # no oid !
+        syntax: integer
+      - name:   tmnxPhysChassisFanIndex
+        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.1.1.1
+        syntax: unsigned32
+    columns:
+      - name:   tmnxPhysChassisFanOperStatus
+        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.2.1.2
+        syntax: integer
+      - name:   tmnxPhysChassisFanSpeedPercent
+        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.1.1.5
+        syntax: unsigned32
