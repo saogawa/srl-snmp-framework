@@ -1,41 +1,14 @@
-# This is the mapping for TIMETRA-CHASSIS-MIB. It defines MIB table tmnxHwTable, tmnxPhysChassisFanTable and tmnxPhysChassisPMTable.
-paths:
-  - /platform/chassis/...
-  - /platform/control/
-  - /platform/linecard/
-optional-paths: # not all hardware platforms supports these
-  - /platform/control/temperature
-  - /platform/linecard/temperature
-  - /platform/linecard/mda
-  - /platform/linecard/mda/temperature
-  - /platform/fabric/...
-  - /platform/fan-tray/...
-  - /platform/power-supply/...
-python-script: timetra_psutrap.py
-enabled: true
 debug: false
-tables:
+enabled: true
+python-script: timetra_psutrap.py
 
-  - name:    tmnxPhysChassisPMTable
-    enabled: true
-    oid:     1.3.6.1.4.1.6527.3.1.2.2.1.24.9
-    indexes:
-      - name:   tmnxPowerModuleHwIndex
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.1
-        syntax: integer
-    columns:
-      - name:   tmnxPhysChassisPMAvailableWatt
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.6
-        syntax: unsigned32
-      - name:   tmnxPhysChassisPMOutputStatus
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.7
-        syntax: integer
-      - name:   tmnxPhysChassisPMInputFeedDown
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.8
-        syntax: bits
-      - name:   tmnxPhysChassisPMFeedAInVolt
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.9
-        syntax: integer32
-      - name:   tmnxPhysChassisPMFeedBInVolt
-        oid:    1.3.6.1.4.1.6527.3.1.2.2.1.24.9.1.10
-        syntax: integer32
+traps:
+  - name: tmnxEqPhysChassPowerSupAcFail
+    oid: 1.3.6.1.4.1.6527.999.2.1
+    triggers:
+      - /platform/power-supply/oper-state
+
+  - name: tmnxEqPhysChassPowerSupAcFailClear
+    oid: 1.3.6.1.4.1.6527.999.2.2
+    triggers:
+      - /platform/power-supply/oper-state
