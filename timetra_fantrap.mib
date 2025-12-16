@@ -1,0 +1,30 @@
+TIMETRA-FANTRAP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE, enterprises
+        FROM SNMPv2-SMI;
+
+timetraFantrapMIB MODULE-IDENTITY
+    LAST-UPDATED  "202512160000Z"
+    ORGANIZATION  "Nokia"
+    CONTACT-INFO  "NOC"
+    DESCRIPTION   "Fan tray failure traps generated from SR Linux SNMP framework YAML."
+    ::= { enterprises 6527 }
+
+--
+-- Private branch used by the YAML:
+-- 1.3.6.1.4.1.6527.999.1
+--
+timetraFantrapNotifications OBJECT IDENTIFIER ::= { enterprises 6527 999 1 }
+
+tmnxEqPhysChassFanFailure NOTIFICATION-TYPE
+    STATUS        current
+    DESCRIPTION   "Fan tray failure detected (trigger: /platform/fan-tray/oper-state)."
+    ::= { timetraFantrapNotifications 1 }
+
+tmnxEqPhysChassFanFailureClear NOTIFICATION-TYPE
+    STATUS        current
+    DESCRIPTION   "Fan tray failure cleared (trigger: /platform/fan-tray/oper-state)."
+    ::= { timetraFantrapNotifications 2 }
+
+END
