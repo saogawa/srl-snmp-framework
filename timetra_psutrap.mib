@@ -1,0 +1,36 @@
+TIMETRA-PSUTRAP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE, enterprises
+        FROM SNMPv2-SMI;
+
+timetraPsuTrapMIB MODULE-IDENTITY
+    LAST-UPDATED  "202512160000Z"
+    ORGANIZATION  "Nokia"
+    CONTACT-INFO  "NOC"
+    DESCRIPTION
+        "Power supply (AC) failure traps generated from SR Linux SNMP framework YAML."
+    ::= { enterprises 6527 }
+
+--
+-- Private branch used by the YAML:
+-- 1.3.6.1.4.1.6527.999.2
+--
+timetraPsuTrapNotifications OBJECT IDENTIFIER
+    ::= { enterprises 6527 999 2 }
+
+tmnxEqPhysChassPowerSupAcFail NOTIFICATION-TYPE
+    STATUS        current
+    DESCRIPTION
+        "AC power supply failure detected
+         (trigger: /platform/power-supply/oper-state)."
+    ::= { timetraPsuTrapNotifications 1 }
+
+tmnxEqPhysChassPowerSupAcFailClear NOTIFICATION-TYPE
+    STATUS        current
+    DESCRIPTION
+        "AC power supply failure cleared
+         (trigger: /platform/power-supply/oper-state)."
+    ::= { timetraPsuTrapNotifications 2 }
+
+END
